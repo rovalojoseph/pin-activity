@@ -38,3 +38,19 @@ def send_request(request):
         return None
     return response
 
+#Pin Confirmation Verification.
+def check_response(response, pin_str):
+    """Analyze the server response."""
+    if response is None:
+        print(f"Failed to receive response for PIN {pin_str}")
+        return False
+    
+    decoded = response.decode(errors='ignore')
+    
+    if "Access Granted" in decoded:
+        print(f"SUCCESS! PIN: {pin_str}")
+        return True
+    else:
+        print(f"Trying PIN {pin_str}")
+        return False
+        
