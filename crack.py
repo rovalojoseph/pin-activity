@@ -18,4 +18,23 @@ def create_request(pin):
         f"\r\n"
     )
     return headers + body, pin_str
-    
+    #create request response
+def send_request(request):
+    """Send the HTTP request and return the server response."""
+    response = b""
+    try:
+        with socket.create_connection((HOST, PORT), timeout=5) as sock:
+            sock.sendall(request.encode())
+            while True:
+                try:
+                    chunk = sock.recv(4096)
+                    if not chunk:
+                        break
+                    response += chunk
+                except socket.timeout:
+                    break
+    except socket.error as err:
+        print(f"Socket error: {err}")
+        return None
+    return response
+
